@@ -21,6 +21,8 @@ namespace _17thLessonCollections
 
         public List<VotingOption> VotingOptions => _votingOptions;
 
+        public Voting Voting => _voting;
+
         public Voting CreateNewVoting(string votingTopic, List<VotingOption> options)
         {
             return new Voting(votingTopic, options);
