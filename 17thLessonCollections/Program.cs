@@ -8,6 +8,7 @@ namespace _17thLessonCollections
         {
             Console.WriteLine("Welcome to our voting system. Please create a voting to be able to use it");
             VotingSystem voting = CreateVotingFromConsole();
+            var showVotingTopic = (VotingSystem voting) => Console.WriteLine($"Current voting topic is: {voting.Voting.VotingTopic}");
             while (true)
             {
                 Console.WriteLine("Please choose one of the options below");
@@ -39,29 +40,11 @@ namespace _17thLessonCollections
                         break;
 
                     case 2:
-                        Console.WriteLine($"Current voting topic is: {voting.Voting.VotingTopic}");
-                        Console.Write("Enter name of a voter: ");
-                        string voterName = Console.ReadLine().Trim();
-                        Console.WriteLine("Now type one of the options you'd like to vote for:");
-                        foreach(var option in voting.VotingOptions)
-                        {
-                            Console.WriteLine(option);
-                        }
-                        string votingOption = Console.ReadLine().Trim();
-                        VotingOption match = voting.VotingOptions.Find(vote => vote.ToString().ToLower().Contains(votingOption.ToLower()));
-                        if(match == null)
-                        {
-                            Console.WriteLine("Error processing your option, try again");
-                            continue;
-                        }
-                        else
-                        {
-                            voting.Vote(match, new User(voterName, false));
-                        }
-                        
+                        showVotingTopic(voting);
+                        ReadVoteFromConsole(voting);
                         break;
                     case 3:
-                        Console.WriteLine($"Current voting topic is: {voting.Voting.VotingTopic}");
+                        showVotingTopic(voting);
                         Console.WriteLine();
                         voting.CountVotes();
                         Console.WriteLine();
@@ -72,6 +55,28 @@ namespace _17thLessonCollections
                 }
 
                 
+            }
+
+            static void ReadVoteFromConsole(VotingSystem voting)
+            {
+                Console.Write("Enter name of a voter: ");
+                string voterName = Console.ReadLine().Trim();
+                Console.WriteLine("Now type one of the options you'd like to vote for:");
+                foreach (var option in voting.VotingOptions)
+                {
+                    Console.WriteLine(option);
+                }
+                string votingOption = Console.ReadLine().Trim();
+                VotingOption match = voting.VotingOptions.Find(vote => vote.ToString().ToLower().Contains(votingOption.ToLower()));
+                if (match == null)
+                {
+                    Console.WriteLine("Error processing your option, try again");
+                    return;
+                }
+                else
+                {
+                    voting.Vote(match, new User(voterName, false));
+                }
             }
 
             static VotingSystem CreateVotingFromConsole()
